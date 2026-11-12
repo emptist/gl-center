@@ -50,20 +50,32 @@ Two genuine full copies were found (the `deprecated/` files in `glibe` only
   *including the skeleton phase*; the `_name` discard-name warning; "never
   classify a class of warnings as expected skeleton shape."
 
-### 7. §8 — `charlist`/`atom` rule
+### 7. §8 — `charlist`/`atom` rule (the ONE place A had something B lacked)
 - **B** folds the rule into §8: "gleam_erlang is where the Erlang-interop
   helpers charlist/atom live — `gleam add gleam_erlang`; never hand-roll BIFs."
-- **A** lacks that sentence in §8 but has a closing **"Project addendum —
-  speak_engl"** (lines 319–325) making the same point and pointing at
-  `FEASIBILITY.md` §7.1 and the skill's `multi-target-erlang.md` §8. Those
-  references are project-scoped and do **not** belong in the shared core, so
-  this addendum was correctly dropped when the rule moved into §8.
+  It ends with a vague pointer: "Measured gotchas: `multi-target-erlang.md` §8."
+- **A** lacks that §8 sentence but has a closing **"Project addendum —
+  speak_engl"** (lines 319–325) that *names* the gotchas: the `os:cmd` charlist
+  trap and `dynamic/decode.field`'s 3-argument form, alongside a project-specific
+  Whisper NIF example pointing at `FEASIBILITY.md` §7.1.
+
+  **Judgement (line-by-line):** B's rule is correct and stays. But A's addendum
+  named two *general* sharp edges that B's §8 only gestured at. **Those two
+  general gotchas were pulled into the canonical §8** (naming them up front: the
+  `os:cmd` charlist trap and `decode.field`'s 3-arg nested-field form). The
+  *project-specific* remainder (Whisper NIF, `FEASIBILITY.md` §7.1) does NOT
+  belong in a shared core and was correctly excluded. So this is the single
+  meaningful A→canonical change; everything else in A is behind B.
 
 ## Conclusion
 
-**B (`glibe`) is the canonical.** It is the corrected, current version and is
-byte-identical to the skill's authoritative copy
+**B (`glibe`) is the canonical base.** It is the corrected, current version and
+is byte-identical to the skill's authoritative copy
 (`~/.workbuddy/skills/gleam-language/references/gleam-core.md`). **A
-(`speak_engl`) is a regression** — its R21/R49 violations must not be merged
-into the single source of truth. The canonical `gleam-thinking-core.md` in this
-repo is therefore a verbatim copy of B.
+(`speak_engl`) is a regression on the owner rulings** (R21/R49 violations must
+not propagate) — but its closing addendum contained two *general* Erlang-interop
+gotchas that B's §8 under-named, and those were merged into the canonical §8.
+
+So the canonical `gleam-thinking-core.md` in this repo = **B, plus the §8
+enrichment from A's addendum**. It is no longer a verbatim B copy; it is the
+reconciled single source of truth.

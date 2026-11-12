@@ -248,8 +248,11 @@ home-grown equivalents: `gleam_stdlib`, `gleam_time` (`Timestamp`), `gleam_json`
 replicate functionality provided by these packages."** Test runner `gleeunit`:
 any `pub fn *_test()` in `test/`. `gleam_erlang` is where the Erlang-interop
 helpers `charlist`/`atom` live — `gleam add gleam_erlang`; never hand-roll BIFs
-(`erlang:binary_to_list`, `binary_to_atom`). Measured gotchas:
-`multi-target-erlang.md` §8.
+(`erlang:binary_to_list`, `binary_to_atom`). Measured sharp edges worth naming
+up front: the `os:cmd` charlist trap (a `String` for an Erlang `os:cmd` must be
+a `charlist`, not a binary) and `dynamic/decode.field`'s 3-argument form for
+nested-field decode. Project-specific examples (e.g. a Whisper NIF) belong in
+project docs, not here. Fuller catalogue: `multi-target-erlang.md` §8.
 
 ## 9. Targets, externals, project structure
 - `gleam.toml`: `name`, `version` required; `target = "erlang" | "javascript"`
