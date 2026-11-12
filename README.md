@@ -18,6 +18,8 @@ project repos are left in place (not overwritten) and are archived here under
     (from `prog_langs/.../speak_engl/docs/gleam-thinking-core.md`)
   - `glibe__docs__gleam-thinking-core-to-memory.md`
     (from `tools_ib/glibe/docs/gleam-thinking-core-to-memory.md`)
+  - `variants/PROVENANCE.md` — the manifest mapping each archived filename to its
+    exact root-folder source path (so every copy is traceable to where it lived).
 - `COMPARISON.md` — the line-level diff analysis: what each variant had, which
   is current, and the per-hunk reconciliation decision.
 
