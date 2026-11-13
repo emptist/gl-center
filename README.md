@@ -31,14 +31,15 @@ the enriched "standard" are no longer live content — both are preserved under
 the two general Erlang-interop gotchas that the enriched version had added to
 §8.
 
-Verify at any time:
+The inode number and link count ARE the relation, so `stat` is the check.
+`cmp` is only a byte-level sanity check and is trivially true for two names
+of one file:
 
 ```
 stat -f '%i %l' /Users/jk/gits/gleam-language/gleam-thinking-core.md \
   ~/.workbuddy/skills/gleam-language/references/gleam-core.md \
-  /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md
-cmp /Users/jk/gits/gleam-language/gleam-thinking-core.md \
-  /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md
+  /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md \
+  /Users/jk/gits/hub/prog_langs/swift/two_way_com_training/speak_engl/docs/gleam-thinking-core.md
 ```
 
 ## 2. The flat shelf — `knowledge/`
@@ -99,22 +100,41 @@ For non-Gleam consumers (a project that only wants the card), use the
 single-file hard link in §2 instead; a path dependency carries code, not
 markdown.
 
-## 5. What breaks a hard link (measured, not guessed)
+## 5. A hard link cannot break; a directory entry can be replaced
 
-All measurements were made on this machine on 2026-11-13, APFS device
-`16777231`:
+Owner 2026-11-13, verbatim:
 
-| Action | Result |
+> "file link (ln without -s or anything else) should not be broken in a
+> unix/linux filesystem. since it is basically a record of pointers to
+> actual storage on disk filesystem, if it is so easy to break, then it is
+> not linked."
+
+That is the exact model: the inode owns the storage and counts its
+directory entries; `ln` adds one more name pointing at that inode. There is
+no reference chain and nothing that can dangle — only a symbolic link can
+dangle. What earlier notes called a "broken link" was **one name being
+replaced by a new, independent file**.
+
+Measured 2026-11-13 on this machine (APFS device `16777231`):
+
+| Action | What the filesystem does |
 |---|---|
-| `ln a/file.md b/file.md`, then edit `a` in place | same inode, link count 2, `b` sees the edit immediately |
-| `ln dir_a dir_b` | `EPERM: operation not permitted` — Unix links are file-level, directories cannot be linked |
-| editor "atomic save" (write temp, `rename` over the name) | **silent break**: the two names get different inodes and diverge |
-| `git checkout -- <file>` / `git restore` | **break**: checkout writes a fresh inode |
-| `git clone` on another machine | git stores bytes, not inodes; the clone gets an ordinary independent copy |
-| another filesystem / volume | hard links cannot cross devices |
+| `ln a/file.md b/file.md` | second directory entry for the SAME inode; link count 2 |
+| edit in place, `> name`, `cp src name` over an existing link | writes THROUGH the existing inode; every name sees it, link count unchanged |
+| `ln dir_a dir_b` | `EPERM` — Unix links are file-level, directories cannot be linked |
+| editor atomic save (write temp, `rename` over the name), `mv`, `git checkout -- <file>`, `git restore` | replaces THAT ONE directory entry with a fresh inode; the other names still hold the original file and the link count drops by one |
+| `git clone` on another machine | git stores bytes, not directory entries — the clone gets ordinary independent files; the relation never travelled |
+| another filesystem / volume | `ln` refused; hard links cannot cross devices |
+| `ln -s a b`, then remove `a` | the ONLY dangling-link case, and it is a symlink |
 
-So: edit in place, and re-link after a checkout or a clone. Rebuilding one
-file is one command:
+So the single source is a filesystem fact, not a protocol: no `cmp` gate,
+no guard script, no sync daemon, nothing to re-copy. The only discipline is
+HOW a name is written — write in place. `cp` over an existing hard link was
+measured to keep the inode (`339900185`, link count 2 before and after), so
+it is safe; earlier notes that listed it as a breaker were wrong.
+
+If a name has been replaced, `stat -f '%i %l'` shows a link count short by
+one. Re-add that one directory entry:
 
 ```
 ln -f /Users/jk/gits/gleam-language/gleam-thinking-core.md \
@@ -139,11 +159,11 @@ must not change when the live card does. The earlier README's section
 "Migration status — NOT applied (by owner decision)" is superseded by the
 2026-11-13 rulings quoted at the top of this file.
 
-One wording inconsistency remains, left for the owner to decide:
-`knowledge/SKILL.md` still says *"This skill copy is the source of truth"*.
-Physically that copy and the canonical root file are one inode, so no content
-can diverge; but the authority statement now names the skill rather than this
-centre. It was not rewritten here.
+The `GIT MIRROR` paragraph in `knowledge/SKILL.md` (line 44) still describes
+the older copy-and-`cmp` protocol and says *"This skill copy is the source of
+truth"*. It is a stale DESCRIPTION, not a hazard: `cp` over an existing hard
+link keeps the inode, and `cmp` is trivially true for two names of one file.
+Rewriting the skill's loading protocol is left for the owner.
 
 ## 7. Gates (2026-11-13)
 
