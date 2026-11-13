@@ -1,0 +1,4 @@
+name = "gleam_language"
+version = "1.0.0"
+target = "erlang"
+gleam = ">= 1.14.0 and < 2.0.0"
