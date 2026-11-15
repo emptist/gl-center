@@ -199,9 +199,17 @@ packages with their hex versions.
 - `pattern-matching.md` — patterns, guards, alternatives
 - `custom-types.md` — records, constructors, opaque types
 - `js-interop.md` — calling JavaScript from Gleam
+- `externals.md` — the `@external` mechanism, and the owner ruling that BEAM
+  siblings (Erlang/Elixir/LFE) are *external* but never *foreign*; JS alone is
+  foreign; you never hand-write `.erl`/`.ex` — use an OTP module via
+  `@external` or a `gleam add` package
 - `testing-gleeunit.md` — gleeunit, and the auto-discovery that means a test
   file needs no `main()`
 - `filepath.md` — path helpers
+- `beam-doors-measured.md` — compiled 2026-11-15 proofs: OTP BIFs, Elixir
+  modules and `term_to_binary` need no dependency, no codec and no
+  hand-written `.erl`; one BEAM, many doors, Gleam the convenient one
+- `beam-cross-platform-measured.md` — compiled 2026-11-15: `speak_engl` runs one Gleam core on macOS/Linux/Windows/iOS/Android via the BEAM; the runtime is portable, not a portability hedge
 </reference_index>
 
 <workflows_index>

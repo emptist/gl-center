@@ -44,12 +44,23 @@ stat -f '%i %l' /Users/jk/gits/gleam-language/gleam-thinking-core.md \
 
 ## 2. The flat shelf — `knowledge/`
 
-`knowledge/` is **one level deep: 18 files, 0 subdirectories, 0 symlinks**.
-Each file is a single `ln` to a single document in
-`~/.workbuddy/skills/gleam-language/`: `SKILL.md`, thirteen `references/*.md`
+`knowledge/` is **one level deep: 21 files, 0 subdirectories, 0 symlinks**
+(18 in the original shelf, plus `externals.md`, `beam-doors-measured.md` and
+`beam-cross-platform-measured.md`, all added 2026-11-15). Each file is a single
+`ln` to a single document in `~/.workbuddy/skills/gleam-language/`: `SKILL.md`,
+sixteen `references/*.md`
 (the core card itself is NOT duplicated here — it is the root file above),
 and four `workflows/*.md`. There is no mirrored directory tree. A file is
 placed here once; whoever uses it links to it.
+
+Measured 2026-11-15: `externals.md` had two **byte-identical but separate
+inodes** (centre `339942506`, skill `339942149`, `cmp` 0). `cmp` cannot tell a
+copy from a link; `stat -f '%i %l'` can. `ln -f` replaced the skill's loose
+copy with a link to the centre's inode (now links 3: centre, skill reference,
+and `tools_ib/glibe/docs/externals.md`, linked for easy reference). Editing
+must be **in place** — an editor's atomic save replaces one directory entry
+(§5). `beam-doors-measured.md` and `beam-cross-platform-measured.md` were added
+the same way, each as a single-file hard link, with no `-s` anywhere.
 
 ```
 ln /Users/jk/gits/gleam-language/knowledge/type-reflex.md \
