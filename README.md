@@ -44,10 +44,11 @@ stat -f '%i %l' /Users/jk/gits/gl-center/gleam-thinking-core.md \
 
 ## 2. The flat shelf — `knowledge/`
 
-`knowledge/` is **one level deep: 22 tracked files, 0 subdirectories, 0
+`knowledge/` is **one level deep: 23 tracked files, 0 subdirectories, 0
 symlinks** (18 in the original shelf, plus `externals.md`,
 `beam-doors-measured.md` and `beam-cross-platform-measured.md`, all added
-2026-11-15, plus `gleam-document-led-tdd.SKILL.md`, added 2026-11-19). Each
+2026-11-15, plus `gleam-document-led-tdd.SKILL.md` and
+`beam-on-the-ground-measured.md`, both added 2026-11-19). Each
 file is a single `ln` to a single document in a WorkBuddy skill directory:
 `SKILL.md`, sixteen `references/*.md`, and four `workflows/*.md` point into
 `~/.workbuddy/skills/gl-center/`
@@ -55,6 +56,13 @@ file is a single `ln` to a single document in a WorkBuddy skill directory:
 `gleam-document-led-tdd.SKILL.md` is the whole single-file gdltdd skill and
 points into `~/.workbuddy/skills/gleam-document-led-tdd/`. There is no mirrored
 directory tree. A file is placed here once; whoever uses it links to it.
+One exception, measured 2026-11-19: `beam-on-the-ground-measured.md` was
+contributed by an AI that does not use WorkBuddy (owner: *"这个作者AI可能并未
+使用workbuddy"*), so it has NO WorkBuddy counterpart. Its second name is a hard
+link into the producing project's docs:
+`prog_langs/.../audio_splitter/docs/beam-on-the-ground-measured.md` — same inode
+`341770712`, links 2. That is still the same one-file protocol, just a different
+consumer directory.
 
 Measured 2026-11-15: `externals.md` had two **byte-identical but separate
 inodes** (centre `339942506`, skill `339942149`, `cmp` 0). `cmp` cannot tell a
@@ -136,6 +144,59 @@ directory — export it here, or read `knowledge/` directly.
 For non-Gleam consumers (a project that only wants the card), use the
 single-file hard link in §2 instead; a path dependency carries code, not
 markdown.
+
+## 4b. How an AI consumes this centre — with and without WorkBuddy
+
+The same files serve two kinds of consumer. Both follow §2/§5; only the
+discovery and the link destination differ. Everything below is verified on this
+machine (2026-11-19).
+
+### WorkBuddy AI (skills auto-discovered from `~/.workbuddy/skills/`)
+
+1. Already installed: `~/.workbuddy/skills/gl-center/SKILL.md` (the thinking
+   core, hard link, inode `324709842`) and its `references/`, `workflows/`.
+   Just load the `gl-center` skill by name — no linking needed to read.
+   `gleam-document-led-tdd/SKILL.md` is likewise installed as a hard link.
+2. To use a shelf file inside a *different* WorkBuddy project, link it into that
+   project's own skill dir (§2 example). The project can then load it as a skill.
+3. New knowledge goes in by appending to the canonical file **in place** —
+   `cat >>`, `>` , `cp src name`, or a Python `open(path, "w")`. Do NOT edit a
+   linked file through an editor that does write-temp-then-rename (atomic save):
+   that replaces the name with a fresh inode and silently drops every other
+   link (§5). After any edit: `stat -f '%i %l' <both names>` must still show one
+   inode and the same link count.
+
+### Non-WorkBuddy AI (plain file access, no skill loader)
+
+1. No skill registry is needed — the centre is a plain directory of markdown.
+   Read the files directly:
+   - thinking core: `/Users/jk/gits/gl-center/gleam-thinking-core.md`
+   - the shelf: `/Users/jk/gits/gl-center/knowledge/*.md`
+   - the gdltdd skill as a normal doc:
+     `/Users/jk/gits/gl-center/knowledge/gleam-document-led-tdd.SKILL.md`
+   - the Gleam design note: `src/gleam_language.gleam` `////` block (§3), or
+     `gleam docs build` / `gleam export package-interface` output.
+2. To keep a local name in your own project, hard-link the single file (§2):
+   ```
+   ln /Users/jk/gits/gl-center/knowledge/<file>.md <project>/docs/<file>.md
+   ```
+   — or, if the project has no `docs/`, put it beside its `README.md`. This is
+   exactly how `beam-on-the-ground-measured.md` was linked into
+   `audio_splitter/docs/`.
+3. To depend on the *code* (the `Stage` types / `////` note), use the `gleam.toml`
+   path dependency in §4 — links carry markdown/code files, a path dependency
+   compiles the package.
+4. Same rules as WorkBuddy for editing: in-place writes only, no symlinks
+   (`ln -s` is ruled out), no directory links. `find <dir> -type l` must be empty.
+
+### What does NOT travel to GitHub
+
+A hard link is a filesystem fact, not git data. When the centre is pushed to
+GitHub, the remote stores ordinary file bytes; a consumer who clones gets an
+independent copy with **no link back** to the centre (§5, "git clone" row).
+The link exists only on this machine between the local paths. Both audiences
+must re-create it locally (`ln`) after a fresh clone; reading the markdown from
+the clone works without any link.
 
 ## 5. A hard link cannot break; a directory entry can be replaced
 
