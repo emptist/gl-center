@@ -6,6 +6,31 @@ The claim of this file: **OTP BIFs are well-known; the friction lives in the bou
 
 ---
 
+## Reviewer annotations — hy4-flash, 2026-11-19 (verified against gleam_stdlib 1.0.5 / Gleam 1.19.2)
+
+I hard-linked this file back into `audio_splitter/docs/` and checked the disputed signatures against the
+actual installed stdlib source (`build/packages/gleam_stdlib/src/gleam/string.gleam`, `list.gleam`, `int.gleam`).
+Two claims below are wrong; I left the author's original text intact and flag them here instead of rewriting:
+
+1. **§1 and §8 — `string.from_utf_codepoints` does NOT accept `List(Int)`.** The real signature
+   (`string.gleam:717`) is `pub fn from_utf_codepoints(utf_codepoints: List(UtfCodepoint)) -> String`.
+   `UtfCodepoint` is an opaque newtype, so the §8 example ending in `string.from_utf_codepoints(codepoints)`
+   (where `codepoints: List(Int)`) is a **compile error**, not a working shortcut. The correct conversion is
+   `string.utf_codepoint(Int) -> Result(UtfCodepoint, Nil)` (`string.gleam:722`) applied per codepoint —
+   i.e. exactly the wrapping the text claims to skip. Same correction applies to §1's closing lines
+   ("`string.from_utf_codepoints(List(Int))` skips the dance").
+2. **§8 — UTF-8 BOM pattern at line ~161 is inconsistent.** `read_transcript` matches `[239, 187, 191]`
+   (an exact 3-element list — only matches a file that is *just* the BOM), while the summary at line ~237
+   correctly uses `[239, 187, 191, .._]`. The former should be the prefix pattern; as written the BOM branch
+   never fires for a real UTF-8 file with content.
+
+For the record, the following claims I checked and found **correct** (no change needed): §2
+`int.divide -> Result(Int, Nil)` (`int.gleam:468`), §3 `list.filter_map` taking `fn(a) -> Result(b, e)`
+(`list.gleam:322`), and the `charlist.Charlist` / `charlist.to_string` used in §1 and §4 — these do resolve,
+but from `gleam_erlang` (`gleam_erlang/src/gleam/erlang/charlist.gleam`), **not** stdlib; this matches
+gl-center's `multi-target-erlang.md`.
+---
+
 ## 1. `Charlist` is opaque — `List(Int)` ≠ `Charlist` at compile time
 
 **Probe:** Call `@external(erlang, "unicode", "characters_to_list")` on a UTF-16 LE binary. The BEAM returns the codepoints as `List(Int)`. But `charlist.to_string` expects `Charlist`, not `List(Int)`. Same runtime representation (a cons-list of ints), different Gleam types.
@@ -26,8 +51,10 @@ fn binary_to_list(binary: BitArray) -> List(Int)
 ```
 
 Then use pure Gleam to turn the codepoint list back into a `String`: pattern-match BOMs, pair up UTF-16 bytes, call `string.from_utf_codepoints` (which expects `List(Int)` — not `UtfCodepoint`, contrary to what one might guess from the name).
+<!-- hy4-flash 2026-11-19: WRONG — real sig is List(UtfCodepoint), see reviewer annotations above -->
 
 **Why not use `charlist.from_list`?** That function is designed for this exact case — but if your codepoints came from BEAM and are `List(Int)`, you still have to hand-wrap each one in the codepoint newtype. `string.from_utf_codepoints(List(Int))` skips the dance.
+<!-- hy4-flash 2026-11-19: WRONG — see reviewer annotations above -->
 
 ---
 
@@ -158,7 +185,7 @@ pub fn read_transcript(raw: BitArray) -> String {
   case list.take(binary_to_list(raw), 4) {
     [255, 254, .._] -> decode_utf16_le(binary_to_list(raw) |> list.drop(2))
     [254, 255, .._] -> decode_utf16_be(binary_to_list(raw) |> list.drop(2))
-    [239, 187, 191] -> bit_array.to_string(raw |> bit_array.drop(3))
+    [239, 187, 191] -> bit_array.to_string(raw |> bit_array.drop(3))  // hy4-flash 2026-11-19: exact list — should be [239, 187, 191, .._] (see line ~237 / annotations)
     _ -> bit_array.to_string(raw)
   }
 }
