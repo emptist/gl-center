@@ -1,7 +1,7 @@
 # Gleam for this project — what the compiler proved, not what a tutorial says
 
 **Every claim here was compiled.** The probes are permanent in
-`~/.workbuddy/skills/gleam-language/probe/` (`src/q_*` build and run; `broken/`
+`~/.workbuddy/skills/gl-center/probe/` (`src/q_*` build and run; `broken/`
 holds the recorded refusals), and the commands are given so you can re-run them
 rather than trust this file.
 
@@ -293,7 +293,7 @@ compiler will not tell you.**
 ## 9b. Re-measured 2026-10-26 — and one thing I had wrong
 
 All compiled and run on **gleam 1.19.2** (permanent probe directory:
-`~/.workbuddy/skills/gleam-language/probe/`).
+`~/.workbuddy/skills/gl-center/probe/`).
 
 - **`io.debug` does not exist.** *"The module `gleam/io` does not have a
   `debug` value."* **The debug printer is `echo`** (a keyword, not a function;

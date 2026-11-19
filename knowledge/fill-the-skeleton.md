@@ -107,7 +107,7 @@ not whether a step belongs at all.
 
 Do **not** write three paragraphs weighing the options — prose has no compiler
 (see `SKILL.md`: *Prose is not a verifier*). Build both shapes in
-`~/.workbuddy/skills/gleam-language/probe/src/` and hand him a table:
+`~/.workbuddy/skills/gl-center/probe/src/` and hand him a table:
 
 | shape | errors | where |
 |---|---|---|

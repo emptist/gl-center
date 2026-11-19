@@ -71,7 +71,7 @@ Two genuine full copies were found (the `deprecated/` files in `glibe` only
 
 **B (`glibe`) is the canonical base.** It is the corrected, current version and
 is byte-identical to the skill's authoritative copy
-(`~/.workbuddy/skills/gleam-language/references/gleam-core.md`). **A
+(`~/.workbuddy/skills/gl-center/references/gleam-core.md`). **A
 (`speak_engl`) is a regression on the owner rulings** (R21/R49 violations must
 not propagate) — but its closing addendum contained two *general* Erlang-interop
 gotchas that B's §8 under-named, and those were merged into the canonical §8.

@@ -1,5 +1,5 @@
 ---
-name: gleam-language
+name: gl-center
 description: >
   Gleam language expertise, measured against a compiler rather than a tutorial.
   Covers the type system, pattern matching, custom types and opaque types,
@@ -44,7 +44,7 @@ read it from the repo: `glibe/docs/gleam-thinking-core-to-memory.md` is a
 **byte-for-byte copy** kept under git. **This skill copy is the source of
 truth.** After ANY edit to `references/gleam-core.md`, immediately re-copy it
 there and verify with
-`cmp ~/.workbuddy/skills/gleam-language/references/gleam-core.md /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md`.
+`cmp ~/.workbuddy/skills/gl-center/references/gleam-core.md /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md`.
 Never edit the mirror alone, and never let the two drift.
 
 <essential_principles>

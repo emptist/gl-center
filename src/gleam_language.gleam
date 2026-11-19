@@ -4,7 +4,7 @@
 //// `////` / `///` line below and writes HTML into build/dev/docs;
 //// `gleam export package-interface` reads the same lines and writes them
 //// into the `documentation` list of `modules["gleam_language"]`. A consuming
-//// project declares `gleam_language = { path = "../../../gleam-language" }`
+//// project declares `gleam_language = { path = "../../../gl-center" }`
 //// in its `[dependencies]` and reads `Stage` / `to_string` through
 //// `import gleam_language`. Measured 2026-11-13: a path dependency compiles
 //// and is importable, but the consumer's own `gleam docs build` does NOT

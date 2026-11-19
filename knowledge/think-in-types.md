@@ -109,7 +109,7 @@ grade costs **0 sites** in the per-grade shape (measured — compare **2 errors 
 2 any-grade functions** when a constructor is added to the union shape).
 
 **Artifact:** the scratch module and its error count, in
-`~/.workbuddy/skills/gleam-language/probe/`. Keep it — it becomes the regression
+`~/.workbuddy/skills/gl-center/probe/`. Keep it — it becomes the regression
 probe for that type.
 
 ### 3. Say what cannot happen, once, in the type

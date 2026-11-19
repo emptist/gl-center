@@ -1,4 +1,4 @@
-# gleam-language — the Gleam knowledge centre under `gits/`
+# gl-center — the Gleam knowledge centre under `gits/`
 
 Owner rulings 2026-11-13, verbatim:
 
@@ -19,8 +19,8 @@ four names are **one file**, not four versions (same inode, same bytes):
 
 | Name | Role |
 |---|---|
-| `/Users/jk/gits/gleam-language/gleam-thinking-core.md` | canonical name in the centre |
-| `~/.workbuddy/skills/gleam-language/references/gleam-core.md` | the skill's authoritative copy |
+| `/Users/jk/gits/gl-center/gleam-thinking-core.md` | canonical name in the centre |
+| `~/.workbuddy/skills/gl-center/references/gleam-core.md` | the skill's authoritative copy |
 | `tools_ib/glibe/docs/gleam-thinking-core-to-memory.md` | glibe's git-tracked mirror |
 | `prog_langs/.../speak_engl/docs/gleam-thinking-core.md` | speak_engl's former stale copy |
 
@@ -36,8 +36,8 @@ The inode number and link count ARE the relation, so `stat` is the check.
 of one file:
 
 ```
-stat -f '%i %l' /Users/jk/gits/gleam-language/gleam-thinking-core.md \
-  ~/.workbuddy/skills/gleam-language/references/gleam-core.md \
+stat -f '%i %l' /Users/jk/gits/gl-center/gleam-thinking-core.md \
+  ~/.workbuddy/skills/gl-center/references/gleam-core.md \
   /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md \
   /Users/jk/gits/hub/prog_langs/swift/two_way_com_training/speak_engl/docs/gleam-thinking-core.md
 ```
@@ -50,7 +50,7 @@ symlinks** (18 in the original shelf, plus `externals.md`,
 2026-11-15, plus `gleam-document-led-tdd.SKILL.md`, added 2026-11-19). Each
 file is a single `ln` to a single document in a WorkBuddy skill directory:
 `SKILL.md`, sixteen `references/*.md`, and four `workflows/*.md` point into
-`~/.workbuddy/skills/gleam-language/`
+`~/.workbuddy/skills/gl-center/`
 (the core card itself is NOT duplicated here — it is the root file above);
 `gleam-document-led-tdd.SKILL.md` is the whole single-file gdltdd skill and
 points into `~/.workbuddy/skills/gleam-document-led-tdd/`. There is no mirrored
@@ -66,7 +66,7 @@ must be **in place** — an editor's atomic save replaces one directory entry
 the same way, each as a single-file hard link, with no `-s` anywhere.
 
 ```
-ln /Users/jk/gits/gleam-language/knowledge/type-reflex.md \
+ln /Users/jk/gits/gl-center/knowledge/type-reflex.md \
    <some-project>/docs/type-reflex.md
 ```
 
@@ -87,7 +87,7 @@ A consumer either loads it in place from the centre path, or links it into its
 own project — one file, the same protocol as §2:
 
 ```
-ln /Users/jk/gits/gleam-language/knowledge/gleam-document-led-tdd.SKILL.md \
+ln /Users/jk/gits/gl-center/knowledge/gleam-document-led-tdd.SKILL.md \
    <project>/.workbuddy/skills/gleam-document-led-tdd/SKILL.md
 ```
 
@@ -118,8 +118,8 @@ In the consuming project's `gleam.toml`:
 
 ```toml
 [dependencies]
-gleam_language = { path = "../../../gleam-language" }   # from glibe
-# or: { path = "/Users/jk/gits/gleam-language" }
+gleam_language = { path = "../../../gl-center" }   # from glibe
+# or: { path = "/Users/jk/gits/gl-center" }
 ```
 
 ```gleam
@@ -185,7 +185,7 @@ If a name has been replaced, `stat -f '%i %l'` shows a link count short by
 one. Re-add that one directory entry:
 
 ```
-ln -f /Users/jk/gits/gleam-language/gleam-thinking-core.md \
+ln -f /Users/jk/gits/gl-center/gleam-thinking-core.md \
   /Users/jk/gits/hub/tools_ib/glibe/docs/gleam-thinking-core-to-memory.md
 ```
 

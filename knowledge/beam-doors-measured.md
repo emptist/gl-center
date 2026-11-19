@@ -1,8 +1,8 @@
 # One BEAM, many doors — measured 2026-11-15
 
-Canonical name: `/Users/jk/gits/gleam-language/knowledge/beam-doors-measured.md`.
+Canonical name: `/Users/jk/gits/gl-center/knowledge/beam-doors-measured.md`.
 A **single-file hard link**, made with `ln` and no `-s`, exposes the same inode
-as `~/.workbuddy/skills/gleam-language/references/beam-doors-measured.md`.
+as `~/.workbuddy/skills/gl-center/references/beam-doors-measured.md`.
 This is the house model (`README.md` §1/§2/§5): one file, one `ln` per
 consumer, no linked directory tree, no symbolic link. `stat -f '%i %l'` is
 the check; `cmp` is only a byte-level sanity check.
@@ -140,7 +140,7 @@ no order at all (§4).
 
 ## 7. How a consumer finds this file
 
-`ln /Users/jk/gits/gleam-language/knowledge/beam-doors-measured.md <consumer>`
+`ln /Users/jk/gits/gl-center/knowledge/beam-doors-measured.md <consumer>`
 — one file, one link. A hard link cannot dangle: it is a second directory
 entry for one inode. What can change is a **name**: an editor's atomic save
 (temp + `rename`), `mv`, or `git checkout -- <file>` replaces that one entry

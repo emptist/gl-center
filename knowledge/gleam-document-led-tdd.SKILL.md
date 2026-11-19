@@ -303,7 +303,7 @@ origin — circular, with a third fabricated part.
 
 The rule: Gleam values are constructed where they are owned; a birth
 function that cannot say WHICH birth it is does not exist; **every `new`
-is checked as a bug, with no container exemption**. My own `gleam-language`
+is checked as a bug, with no container exemption**. My own `gl-center`
 skill said "a container may be `new`" and its `gleam-core.md` §3 example
 literally contained `pub fn new(...)`. Both are now struck (§3 →
 `clamp_positive`, §5 gains a No-`new` entry, SKILL.md's `<do_not>` loses the

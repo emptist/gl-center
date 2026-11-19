@@ -27,7 +27,7 @@ Every entry in the table below is that same question asked about one shape.
 
 Each row: what my hand reaches for, why it feels comfortable, what it must be.
 The right-hand column is compiled (permanent probes in
-`~/.workbuddy/skills/gleam-language/probe/`, gleam 1.19.2, JavaScript target).
+`~/.workbuddy/skills/gl-center/probe/`, gleam 1.19.2, JavaScript target).
 
 | The reach | Why it feels good | What it must be |
 |---|---|---|
