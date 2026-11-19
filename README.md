@@ -159,10 +159,21 @@ Measured 2026-11-13 on this machine (APFS device `16777231`):
 | `ln a/file.md b/file.md` | second directory entry for the SAME inode; link count 2 |
 | edit in place, `> name`, `cp src name` over an existing link | writes THROUGH the existing inode; every name sees it, link count unchanged |
 | `ln dir_a dir_b` | `EPERM` — Unix links are file-level, directories cannot be linked |
-| editor atomic save (write temp, `rename` over the name), `mv`, `git checkout -- <file>`, `git restore` | replaces THAT ONE directory entry with a fresh inode; the other names still hold the original file and the link count drops by one |
+| `mv` / `rename(2)` **within one filesystem** — including renaming the directory that CONTAINS the file, or renaming the link name itself | moves a directory entry only; SAME inode, link count unchanged. Proven 2026-11-19 below |
+| editor atomic save (write temp = NEW inode, `rename` over the name), `git checkout -- <file>`, `git restore` | the name ends up pointing at a fresh inode; the other names still hold the original file and the link count drops by one |
 | `git clone` on another machine | git stores bytes, not directory entries — the clone gets ordinary independent files; the relation never travelled |
 | another filesystem / volume | `ln` refused; hard links cannot cross devices |
 | `ln -s a b`, then remove `a` | the ONLY dangling-link case, and it is a symlink |
+
+Measured 2026-11-19 (`/tmp/gleam_rename_probe`, APFS): a file `dirA/file.md`
+hard-linked to `outside_link.md` (inode `341919344`, links 2). `mv dirA dirB`
+— renaming the **containing directory** — left the inode and link count
+unchanged; then `mv outside_link.md renamed_link.md` — renaming the **link
+name** — did too; writing through one name was visible through the other.
+Owner 2026-11-19: *"file link will remain even I would change the folder name
+the file now lives in … renaming should not break any hard link"* — this is
+why the centre may be renamed for GitHub without any relinking. A rename is
+not an inode replacement; only a fresh-inode overwrite is (row above).
 
 So the single source is a filesystem fact, not a protocol: no `cmp` gate,
 no guard script, no sync daemon, nothing to re-copy. The only discipline is
