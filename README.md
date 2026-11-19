@@ -44,14 +44,17 @@ stat -f '%i %l' /Users/jk/gits/gleam-language/gleam-thinking-core.md \
 
 ## 2. The flat shelf — `knowledge/`
 
-`knowledge/` is **one level deep: 21 files, 0 subdirectories, 0 symlinks**
-(18 in the original shelf, plus `externals.md`, `beam-doors-measured.md` and
-`beam-cross-platform-measured.md`, all added 2026-11-15). Each file is a single
-`ln` to a single document in `~/.workbuddy/skills/gleam-language/`: `SKILL.md`,
-sixteen `references/*.md`
-(the core card itself is NOT duplicated here — it is the root file above),
-and four `workflows/*.md`. There is no mirrored directory tree. A file is
-placed here once; whoever uses it links to it.
+`knowledge/` is **one level deep: 22 tracked files, 0 subdirectories, 0
+symlinks** (18 in the original shelf, plus `externals.md`,
+`beam-doors-measured.md` and `beam-cross-platform-measured.md`, all added
+2026-11-15, plus `gleam-document-led-tdd.SKILL.md`, added 2026-11-19). Each
+file is a single `ln` to a single document in a WorkBuddy skill directory:
+`SKILL.md`, sixteen `references/*.md`, and four `workflows/*.md` point into
+`~/.workbuddy/skills/gleam-language/`
+(the core card itself is NOT duplicated here — it is the root file above);
+`gleam-document-led-tdd.SKILL.md` is the whole single-file gdltdd skill and
+points into `~/.workbuddy/skills/gleam-document-led-tdd/`. There is no mirrored
+directory tree. A file is placed here once; whoever uses it links to it.
 
 Measured 2026-11-15: `externals.md` had two **byte-identical but separate
 inodes** (centre `339942506`, skill `339942149`, `cmp` 0). `cmp` cannot tell a
@@ -69,6 +72,29 @@ ln /Users/jk/gits/gleam-language/knowledge/type-reflex.md \
 
 That is the whole protocol. No sync daemon, no copy step, no guard script.
 Editing either name edits the same inode.
+
+### The gdltdd skill, shared 2026-11-19
+
+`gleam-document-led-tdd.SKILL.md` is the document-led-TDD skill (owner name
+"gdltdd"). It is a **whole skill in one file** — valid SKILL.md frontmatter
+plus body — so it needs no `references/` tree. Measured: centre
+`knowledge/gleam-document-led-tdd.SKILL.md` and
+`~/.workbuddy/skills/gleam-document-led-tdd/SKILL.md` are one inode
+(`341913160`, links 2, `cmp` 0). The centre is canonical; the WorkBuddy skill
+name was a loose copy (links 1) before it was replaced with `ln -f`.
+
+A consumer either loads it in place from the centre path, or links it into its
+own project — one file, the same protocol as §2:
+
+```
+ln /Users/jk/gits/gleam-language/knowledge/gleam-document-led-tdd.SKILL.md \
+   <project>/.workbuddy/skills/gleam-document-led-tdd/SKILL.md
+```
+
+Editing the shared file is **in place only** (§5): new experience and
+enlightenments — e.g. the 2026-11-19 compound-todo refinement — were appended
+to the skill body before the link was made, and a future append edits this same
+inode. An editor's atomic save would replace the name and drop the link.
 
 ## 3. The Gleam package — where the design note lives
 
